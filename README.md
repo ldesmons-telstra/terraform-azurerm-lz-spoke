@@ -11,7 +11,7 @@ It is intented to be used in conjonction with the **lz-hub module** which can be
 
 ## Usage
 
-**Create a spoke vnet without subnets.**
+**Create a spoke vnet without subnets**
 
 ```terraform
 resource "azurerm_resource_group" "rg_spoke" {
@@ -28,13 +28,22 @@ module "vnet_spoke" {
   location            = "southeastasia"
   resource_group_name = "my-rg"
   name                = "vnet-spoke"
-  address_space       = ["10.10.31.0/24"]
-
-  hub_vnet_id = "_id of the hub vnet_"
+  address_space       = ["10.0.0.0/24"]
+  subnets = [
+    {
+      address_prefixes = ["10.0.0.0/26"]
+      name             = "subnet-01"
+    },
+    {
+      address_prefixes = ["10.0.0.1/26"]
+      name             = "subnet-02"
+    }
+  ]
+  hub_vnet_id = "id of the hub vnet"
   hub_vnet_name = "name of the hub vnet"
   hub_vnet_resource_group_name = "name of the resource group of the hub vnet"
 
-  tags = = {
+  tags = {
     "environment" : "dev"
   }
 }
