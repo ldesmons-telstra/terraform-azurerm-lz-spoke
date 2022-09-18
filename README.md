@@ -5,13 +5,11 @@ This module provisions a Spoke vnet in an Azure Landing Zone.
 It is intented to be used in conjonction with the lz-hub module, which can be found here : [https://registry.terraform.io/modules/ldesmons-telstra/lz-hub/azurerm/latest]
 
 ## Features 
-***
 
 - creates a spoke vnet with optional subnets.
 - adds vnet peerings between the hib vnet and this spoke vnet.
 
 ## Usage
-***
 
 ```
 resource "azurerm_resource_group" "rg-spoke" {
