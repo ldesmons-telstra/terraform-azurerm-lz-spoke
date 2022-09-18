@@ -44,12 +44,7 @@ variable "subnets" {
   }))
 
   default     = []
-  description = <<-EOT
-  (Optional) The array of subnets to create in this spoke vnet. For every subnet:
-
-    name : the name of the subnet.
-    address_prefixes : the list of address prefixes of the subnet. 
-  EOT
+  description = "(Optional) The array of subnets to create in this spoke vnet."
 }
 
 # tags (optional)
