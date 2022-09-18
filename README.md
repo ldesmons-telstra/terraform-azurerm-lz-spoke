@@ -12,7 +12,7 @@ It is intented to be used in conjonction with the lz-hub module, which can be fo
 ## Usage
 
 ```terraform
-resource "azurerm_resource_group" rg-spoke" {
+resource "azurerm_resource_group" "rg-spoke" {
   name     = var.resource_groups.spoke_name
   location = var.location
   tags     = var.tags
