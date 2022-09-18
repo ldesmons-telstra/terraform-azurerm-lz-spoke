@@ -11,8 +11,6 @@ It is intented to be used in conjonction with the **lz-hub module** which can be
 
 ## Usage
 
-**Create a spoke vnet without subnets**
-
 ```terraform
 resource "azurerm_resource_group" "rg_spoke" {
   name     = "my-rg"
@@ -42,7 +40,6 @@ module "vnet_spoke" {
   hub_vnet_id = "id of the hub vnet"
   hub_vnet_name = "name of the hub vnet"
   hub_vnet_resource_group_name = "name of the resource group of the hub vnet"
-
   tags = {
     "environment" : "dev"
   }
