@@ -13,11 +13,52 @@ It is intented to be used in conjonction with the **lz-hub module** which can be
 
 ## Usage
 
+**Create a hub vnet and a spoke vnet**
+
 ```terraform
-resource "azurerm_resource_group" "rg_spoke" {
-  name     = "my-rg"
+resource "azurerm_resource_group" "rg_hub" {
+  name     = "my-rg-hub"
   location = "southeastasia"
   tags     = {
+    "environment" : "dev"
+  }
+}
+
+resource "azurerm_resource_group" "rg_spoke" {
+  name     = "my-rg-spoke"
+  location = "southeastasia"
+  tags     = {
+    "environment" : "dev"
+  }
+}
+
+module "vnet_hub" {
+  source  = "ldesmons-telstra/lz-hub/azurerm"
+  version = "1.0.0"
+
+  location            = "southeastasia"
+  resource_group_name = "my-rg-hub"
+  name                = "my-vnet-hub"
+  address_space       = ["10.10.31.0/24"]
+
+  vnet_gateway_name                   = "my-vnet-gateway"
+  vnet_gateway_address_prefixes       = ["10.10.31.128/27"]
+  vnet_gateway_public_ip_name         = "my-vnet-gateway-pip"
+  local_network_gateway_name          = "my-local-network-gateway"
+  local_network_gateway_address       = "203.134.151.51"
+  local_network_gateway_address_space = ["192.1.1.0/24", "192.168.0.0/24", "192.168.1.0/24", "192.2.2.0/24"]
+  gateway_connection_name             = "my-local-network-gateway-connection"
+  gateway_connection_shared_key       = "shared-key"
+
+  firewall_name                       = "my-firewall"
+  firewall_public_ip_name             = "my-firewall-pip"
+  firewall_subnet_address_prefixes    = ["10.10.31.0/26"]
+
+  bastion_name                        = "my-bastion"
+  bastion_public_ip_name              = "my-bastion-pip"
+  bastion_subnet_address_prefixes     = ["10.10.31.64/26"]
+
+  tags = {
     "environment" : "dev"
   }
 }
@@ -25,10 +66,12 @@ resource "azurerm_resource_group" "rg_spoke" {
 module "vnet_spoke" {
   source              = "ldesmons-telstra/lz-spoke/azurerm"
   version             = "1.0.0"
+
   location            = "southeastasia"
-  resource_group_name = "my-rg"
+  resource_group_name = "my-rg-spoke"
   name                = "vnet-spoke"
   address_space       = ["10.0.0.0/24"]
+
   subnets = [
     {
       address_prefixes = ["10.0.0.0/26"]
@@ -39,9 +82,11 @@ module "vnet_spoke" {
       name             = "subnet-02"
     }
   ]
-  hub_vnet_id = "id of the hub vnet"
-  hub_vnet_name = "name of the hub vnet"
-  hub_vnet_resource_group_name = "name of the resource group of the hub vnet"
+
+  hub_vnet_id = module.vnet_hub.vnet_id   
+  hub_vnet_name = "my-vnet-hub"
+  hub_vnet_resource_group_name = "my-rg-hub"
+
   tags = {
     "environment" : "dev"
   }
