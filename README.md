@@ -2,20 +2,23 @@
 
 This module provisions a **spoke vnet** in an Azure Landing Zone.
 
-It is intented to be used in conjonction with the **lz-hub module** which can be found here : https://registry.terraform.io/modules/ldesmons-telstra/lz-hub/azurerm/latest
+It is intented to be used in conjonction with the following modules :
+ - **lz-hub module** which can be found here : https://registry.terraform.io/modules/ldesmons-telstra/lz-hub/azurerm/latest
+ - **lz-association module** which can be found here : https://registry.terraform.io/modules/ldesmons-telstra/lz-association/azurerm/latest
 
-![Telstra - Landing Zone](https://user-images.githubusercontent.com/108506349/190936360-905c5834-e92d-4465-96cc-d31954f0aa36.png)
+![Telstra - Landing Zone (1)](https://user-images.githubusercontent.com/108506349/193437641-95b26822-e1c1-4df2-ab2c-740a511cb4bd.png)
 
 ## Features 
 
-- creates a **spoke vnet** with optional subnets. The spoke vnet must be linked to a **hub vnet** (usually created by the lz-hub module).
-- adds **vnet peerings** between the hub vnet and this spoke vnet (both ways).
+- creates a **spoke vnet** with optional subnets.
 
 ## Usage
 
 **Create a hub vnet and a spoke vnet**
 
 ```terraform
+
+# resource groups
 resource "azurerm_resource_group" "rg_hub" {
   name     = "my-rg-hub"
   location = "southeastasia"
@@ -32,9 +35,10 @@ resource "azurerm_resource_group" "rg_spoke" {
   }
 }
 
+# hub vnet
 module "vnet_hub" {
   source  = "ldesmons-telstra/lz-hub/azurerm"
-  version = "1.0.0"
+  version = "1.0.2"
 
   location            = "southeastasia"
   resource_group_name = "my-rg-hub"
@@ -63,9 +67,10 @@ module "vnet_hub" {
   }
 }
 
+# spoke vnet (can add multiple spoke modules like this)
 module "vnet_spoke" {
   source              = "ldesmons-telstra/lz-spoke/azurerm"
-  version             = "1.0.0"
+  version             = "1.0.2"
 
   location            = "southeastasia"
   resource_group_name = "my-rg-spoke"
@@ -82,10 +87,6 @@ module "vnet_spoke" {
       name             = "subnet-02"
     }
   ]
-
-  hub_vnet_id = module.vnet_hub.vnet_id   
-  hub_vnet_name = "my-vnet-hub"
-  hub_vnet_resource_group_name = "my-rg-hub"
 
   tags = {
     "environment" : "dev"

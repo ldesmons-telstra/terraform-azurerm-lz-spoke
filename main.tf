@@ -1,4 +1,8 @@
-# TF main config
+/* -----------------------
+   TF main config.
+   -----------------------
+*/
+
 terraform {
   required_version = ">= 0.12.24"
   required_providers {
