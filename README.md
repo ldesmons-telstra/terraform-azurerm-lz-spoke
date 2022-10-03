@@ -77,16 +77,16 @@ module "vnet_spoke" {
   name                = "vnet-spoke"
   address_space       = ["10.0.0.0/24"]
 
-  subnets = [
-    {
-      address_prefixes = ["10.0.0.0/26"]
+  subnets = {
+    subnet-01 = {
       name             = "subnet-01"
-    },
-    {
-      address_prefixes = ["10.0.0.1/26"]
-      name             = "subnet-02"
+      address_prefixes = ["10.0.0.0/26"]
     }
-  ]
+    subnet-02 = {
+      name             = "subnet-02"
+      address_prefixes = ["10.0.0.1/26"]
+    }
+  }
 
   tags = {
     "environment" : "dev"

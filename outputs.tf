@@ -9,6 +9,6 @@ output "vnet_id" {
 }
 
 output "subnets_ids" {
-  value       = tomap({for k, subnet in azurerm_subnet.subnets : k => subnet.id })
+  value       = tomap({ for k, subnet in azurerm_subnet.subnets : k => subnet.id })
   description = "The ids of the newly created spoke subnets in the spoke vnet."
 }

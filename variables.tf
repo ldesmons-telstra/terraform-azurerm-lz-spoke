@@ -34,13 +34,13 @@ variable "address_space" {
 */
 
 variable "subnets" {
-  type = list(object({
+  type = map(object({
     name             = string,
     address_prefixes = list(string)
   }))
 
-  default     = []
-  description = "(Optional) The array of subnets to create in this spoke vnet."
+  default     = {}
+  description = "(Optional) The map of subnets to create in this spoke vnet."
 }
 
 /* -----------------------
